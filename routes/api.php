@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,8 @@ use App\Http\Controllers\ArticleController;
 //     return $request->user();
 // });
 
-Route::resource('articles', ArticleController::class);
+Route::post('login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::resource('articles', ArticleController::class);
+});
