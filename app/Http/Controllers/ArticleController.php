@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\Validator;
+use App\Events\ArticleCreated;
+use App\Events\ArticleUpdated;
 
 class ArticleController extends Controller
 {
@@ -19,7 +21,7 @@ class ArticleController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'content' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'creator' => 'required'
         ]);
 
@@ -42,6 +44,7 @@ class ArticleController extends Controller
         $article->save();
 
         // Dispatch event to rebuild article cache here
+        event(new ArticleCreated($article));
 
         return response()->json(['message' => 'Article created successfully']);
     }
@@ -80,6 +83,7 @@ class ArticleController extends Controller
         $article->save();
 
         // Dispatch event to rebuild article cache here
+        event(new ArticleUpdated($article));
 
         return response()->json(['message' => 'Article updated successfully']);
     }
