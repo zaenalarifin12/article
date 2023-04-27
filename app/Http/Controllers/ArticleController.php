@@ -43,7 +43,6 @@ class ArticleController extends Controller
 
         $article->save();
 
-        // Dispatch event to rebuild article cache here
         event(new ArticleCreated($article));
 
         return response()->json(['message' => 'Article created successfully']);
@@ -82,7 +81,6 @@ class ArticleController extends Controller
 
         $article->save();
 
-        // Dispatch event to rebuild article cache here
         event(new ArticleUpdated($article));
 
         return response()->json(['message' => 'Article updated successfully']);
@@ -92,8 +90,6 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         $article->delete();
-
-        // Dispatch event to rebuild article cache here
 
         return response()->json(['message' => 'Article deleted successfully']);
     }
